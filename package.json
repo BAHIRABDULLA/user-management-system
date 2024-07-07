@@ -1,0 +1,17 @@
+{
+  "name": "UMS",
+  "version": "1.0.0",
+  "main": "index.js",
+  "repository": "https://github.com/BAHIRABDULLA/user-management-system.git",
+  "author": "Bahir Abdulla <bahirk880@gmail.com>",
+  "license": "MIT",
+  "scripts": {
+    "start": "nodemon server/index.js"
+  },
+  "dependencies": {
+    "express": "^4.19.2"
+  },
+  "devDependencies": {
+    "nodemon": "^3.1.4"
+  }
+}
