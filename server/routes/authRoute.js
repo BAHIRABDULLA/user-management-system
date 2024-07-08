@@ -6,4 +6,5 @@ router.use(express.json())
 const authController = require('../controllers/authController.js')
 // router.get('/signup',authController.loadSignup)
 router.post('/signup',authController.signup)
+router.post('/signin',authController.signin)
 module.exports = router

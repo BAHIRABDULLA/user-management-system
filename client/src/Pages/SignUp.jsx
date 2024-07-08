@@ -1,8 +1,10 @@
 import React, { useState } from 'react'
-import { Link } from 'react-router-dom'
+import { Link ,useNavigate} from 'react-router-dom'
 
 const SignUp = () => {
   const [formData, setFormdata] = useState({})
+  const [error,setError] = useState('')
+  const navigate = useNavigate()
   const addToForm = (e) => {
 
     setFormdata({ ...formData, [e.target.id]: e.target.value })
@@ -10,16 +12,25 @@ const SignUp = () => {
   console.log(formData, 'formdata');
   const handleSubmit = async (e) => {
     e.preventDefault()
-    const res = await fetch('http://localhost:3004/server/signup', {
-      method: 'POST',
-      headers: {
-        'Content-Type': 'application/json'
-      },
-      body: JSON.stringify(formData)
-    })
-    const data = await res.json()
-    console.log(data, 'data....');
-
+    try {
+      const res = await fetch('/server/signup', {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json'
+        },
+        body: JSON.stringify(formData)
+      })
+      if(!res.ok){
+        const errorData = await res.json()
+        throw new  Error(errorData )
+      }
+      const data = await res.json()
+      console.log(data, 'data....');
+      setError('')
+      navigate('/signin')
+    } catch (error) {
+      console.error('Error founding in handlesubmit sign up ', error);
+    }
   }
 
   return (
@@ -68,6 +79,7 @@ const SignUp = () => {
         <p>Already an account?
           <Link to='/signin'><span className='text-blue-500 font-medium'> Sign In</span></Link></p>
       </div>
+      <p className='text-red-700'>{error}</p>
     </div>
   )
 }
