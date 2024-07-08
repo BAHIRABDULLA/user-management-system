@@ -1,11 +1,15 @@
 import React, { useState } from 'react'
 import { Link, useNavigate } from 'react-router-dom'
 import axios from 'axios'
+import { signInStart,signInSuccess,signInFailure } from '../redux/user/userSlice'
+import { useDispatch, useSelector } from 'react-redux'
 
 const SignIn = () => {
   const [formData, setFormdata] = useState({})
-  const [error, setError] = useState('')
+  const {loading,error} = useSelector((state)=>state.user)
+  // const [error, setError] = useState('')
   const navigate = useNavigate()
+  const dispatch = useDispatch()
   const addToForm = (e) => {
     setFormdata({ ...formData, [e.target.id]: e.target.value })
   }
@@ -13,16 +17,20 @@ const SignIn = () => {
   const handleSubmit = async (e) => {
     e.preventDefault()
     try {
+      dispatch(signInStart)
       const res = await axios.post('/server/signin', formData)
       console.log(res.data, 'response from server in client side');
-      setError('')
+      // setError('')
+      dispatch(signInSuccess(res.data))
       navigate('/')
     } catch (error) {
       console.error('Error founding in handleSubmit signin',error);
       if(error.response&&error.response.status===404){
-        setError('Wrong credentials ,please try again ')
+        dispatch(signInFailure('Wrong credentials ,please try again '))
+        // setError('Wrong credentials ,please try again ')
       }else{
-        setError('An error occured , please try again ')
+        dispatch(signInFailure('An error occured , please try again '))
+        // setError('An error occured , please try again ')
       }
     }
 
