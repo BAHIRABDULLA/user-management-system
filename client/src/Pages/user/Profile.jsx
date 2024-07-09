@@ -3,6 +3,9 @@ import { useSelector } from 'react-redux'
 import {getDownloadURL, getStorage, ref, uploadBytesResumable} from 'firebase/storage'
 import { app } from '../../firebase'
 import axios from 'axios'
+import { useDispatch } from 'react-redux'
+import { deleteUserStart, deleteUserSuccess, deleteUsesrFailure, updateUserStart,updateUserSuccess,updateUsesrFailure } from '../../redux/user/userSlice'
+
 
 const Profile = () => {
   const fileRef = useRef(null)
@@ -12,7 +15,8 @@ const Profile = () => {
   const [imageError , setImageError] = useState(false)
   const [formData,setFormdata] = useState({})
   console.log(formData,'form data in profile');
-  const { currentUser } = useSelector(state => state.user)
+  const [updateSuccess,setUpdateSuccess] = useState(false)
+  const { currentUser,loading ,error } = useSelector(state => state.user)
   useEffect(()=>{
     if(image){
       handleFileUplaod(image)
@@ -41,16 +45,40 @@ const Profile = () => {
   const addToForm = (e)=>{
     setFormdata({...formData,[e.target.id]:e.target.value})
   }
+  const dispatch = useDispatch()
   const handleSubmit = async(e)=>{
     e.preventDefault()
     try {
-      const res = await axios.post('/server/update/',formData)
+      dispatch(updateUserStart())
+      const res = await axios.post(`/server/update/${currentUser._id}`,formData)
+      if(res.data===false){
+        dispatch(updateUsesrFailure(res.data))
+        return
+      }
+      dispatch(updateUserSuccess(res.data))
+      setUpdateSuccess(true)
     } catch (error) {
       console.error('Error founded in handleSubmit in profile',error);
+      dispatch(updateUsesrFailure(error))
     }
     
   }
   console.log(formData,'form data in add to form ');
+
+  const handleDeleteAccount = async()=>{
+    try {
+      dispatch(deleteUserStart())
+      const res = await axios.delete(`/server/delete/${currentUser._id}`)
+      if(res.data===false){
+        dispatch(deleteUsesrFailure(res.data))
+        return
+      }
+      dispatch(deleteUserSuccess())
+    } catch (error) {
+      console.error('Error founding on handleDeleteAccount',error);
+      dispatch(deleteUsesrFailure(error))
+    }
+  }
   return (
     <div className='p-3 max-w-lg mx-auto'>
       <h1 className='text-3xl font-semibold text-center my-3'>Profile</h1>
@@ -79,12 +107,14 @@ const Profile = () => {
           id='password' placeholder='Password' onChange={addToForm} className='bg-slate-100 rounded-lg p-2 ' />
 
         <button type='submit' className='bg-slate-700 text-white p-3 rounded-lg
-         uppercase hover:opacity-95 disabled:opacity-80'>update</button>
+         uppercase hover:opacity-95 disabled:opacity-80'>{loading?'Loading..':'Update'}</button>
       </form>
       <div className='flex justify-between m-5'>
-        <span className='text-red-700 cursor-pointer'>Delete Account</span>
+        <span onClick={handleDeleteAccount} className='text-red-700 cursor-pointer'>Delete Account</span>
         <span className='text-red-700 cursor-pointer'>Sign Out</span>
       </div>
+      <p className='text-red-700 mt-5'>{error&&'Something went wrong'}</p>
+      <p className='text-green-700 mt-5'>{updateSuccess&&'User updated'}</p>
     </div>
   )
 }

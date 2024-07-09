@@ -25,15 +25,29 @@ const updateProfile = async (req, res) => {
                 password: req.body.password,
                 profilePicture: req.body.profilePicture
             }
-        },{new:true}
+        }, { new: true }
         )
-        const {password,...rest} = updateUser
+        const { password, ...rest } = updateUser
         res.status(200).json(rest)
     } catch (error) {
 
     }
 }
+
+const deleteUser = async (req, res) => {
+    if (req.user.id !== req.params.id) {
+        return res.status(404).json('you can delete only your account')
+    }
+    try {
+        await User.findByIdAndDelete(req.params.id)
+        res.status(200).json('User has been deleted...')
+    } catch (error) {
+        console.error('Error founded in deleteUser ', error);
+    }
+}
+
 module.exports = {
     loadPage,
-    updateProfile
+    updateProfile,
+    deleteUser
 }
