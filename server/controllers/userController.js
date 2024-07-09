@@ -45,9 +45,17 @@ const deleteUser = async (req, res) => {
         console.error('Error founded in deleteUser ', error);
     }
 }
+const signOut = async(req,res)=>{
+    try {
+        res.clearCookie('access_token').status(200).json('signout success')
+    } catch (error) {
+        console.error('Error founding on sign out ',error);
+    }
+}
 
 module.exports = {
     loadPage,
     updateProfile,
-    deleteUser
+    deleteUser,
+    signOut
 }
