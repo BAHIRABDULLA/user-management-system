@@ -4,8 +4,10 @@ import { app } from '../firebase'
 import axios from 'axios'
 import { useDispatch } from 'react-redux'
 import { signInSuccess } from '../redux/user/userSlice'
+import {useNavigate} from 'react-router-dom'
 
 const Oauth = () => {
+    const navigate = useNavigate()
     const dispatch = useDispatch()
     const handleGoogleClick =async ()=>{
         try {
@@ -20,6 +22,7 @@ const Oauth = () => {
             })
             if(res){
                 dispatch(signInSuccess(res.data))
+                navigate('/')
             }
         } catch (error) {
             console.error('Error founded in handleGoogleClick',error);
@@ -27,7 +30,7 @@ const Oauth = () => {
     }
   return (
     <div >
-        <button onClick={handleGoogleClick} type='button' className='bg-blue-500 text-white rounded-lg uppercase hover:opacity-95 p-3 w-full'>Continue with goole</button>
+        <button onClick={handleGoogleClick} type='button' className='bg-blue-500 text-white rounded-lg uppercase hover:opacity-95 mt-6 p-3 w-full'>Continue with goole</button>
     </div>
   )
 }

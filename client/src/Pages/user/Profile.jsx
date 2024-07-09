@@ -2,6 +2,7 @@ import React, { useEffect, useRef, useState } from 'react'
 import { useSelector } from 'react-redux'
 import {getDownloadURL, getStorage, ref, uploadBytesResumable} from 'firebase/storage'
 import { app } from '../../firebase'
+import axios from 'axios'
 
 const Profile = () => {
   const fileRef = useRef(null)
@@ -37,12 +38,25 @@ const Profile = () => {
         setFormdata({...formData,profilePicture:downloadURL}))
     })
   }
+  const addToForm = (e)=>{
+    setFormdata({...formData,[e.target.id]:e.target.value})
+  }
+  const handleSubmit = async(e)=>{
+    e.preventDefault()
+    try {
+      const res = await axios.post('/server/update/',formData)
+    } catch (error) {
+      console.error('Error founded in handleSubmit in profile',error);
+    }
+    
+  }
+  console.log(formData,'form data in add to form ');
   return (
     <div className='p-3 max-w-lg mx-auto'>
       <h1 className='text-3xl font-semibold text-center my-3'>Profile</h1>
-      <form className='flex flex-col gap-3'>
+      <form className='flex flex-col gap-3' onSubmit={handleSubmit}>
         <input type="file" ref={fileRef} hidden accept='image/.*' onChange={(e)=>setImage(e.target.files[0])}/>
-        <img onClick={() => fileRef.current.click()} src={currentUser.profilePicture}
+        <img onClick={() => fileRef.current.click()} src={formData.profilePicture||currentUser.profilePicture}
          alt="" className='h-16 outline-green-800 border-red-800-400 w-24 self-center
         cursor-pointer rounded-full object-cover'/>
 
@@ -53,18 +67,18 @@ const Profile = () => {
         :imagePercent===100?(<span className='text-green-700'>Image upload successfully</span>):('')}</p>
 
         <input type="text" defaultValue={currentUser.name} id='name'
-          placeholder='Name' className='bg-slate-100 rounded-lg p-2 ' />
+          placeholder='Name' onChange={addToForm} className='bg-slate-100 rounded-lg p-2 ' />
 
         <input type="email" defaultValue={currentUser.email} id='email'
-          placeholder='Email' className='bg-slate-100 rounded-lg p-2 ' />
+          placeholder='Email' onChange={addToForm} className='bg-slate-100 rounded-lg p-2 ' />
 
         <input type="text" defaultValue={currentUser.phone ? phone : ""}
-          id='phone' placeholder='Phone' className='bg-slate-100 rounded-lg p-2 ' />
+          id='phone' placeholder='Phone' onChange={addToForm} className='bg-slate-100 rounded-lg p-2 ' />
 
         <input type="password" defaultValue={currentUser.password}
-          id='password' placeholder='Password' className='bg-slate-100 rounded-lg p-2 ' />
+          id='password' placeholder='Password' onChange={addToForm} className='bg-slate-100 rounded-lg p-2 ' />
 
-        <button className='bg-slate-700 text-white p-3 rounded-lg
+        <button type='submit' className='bg-slate-700 text-white p-3 rounded-lg
          uppercase hover:opacity-95 disabled:opacity-80'>update</button>
       </form>
       <div className='flex justify-between m-5'>

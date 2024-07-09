@@ -35,12 +35,12 @@ const SignUp = () => {
   }
 
   return (
-    <div className='mx-auto max-w-lg p-9 bg-zinc-300 my-9 rounded-md'>
+    <div className='mx-auto max-w-lg p-9 bg-zinc-300 my-7 rounded-md'>
       <h2 className='font-semibold text-center text-4xl'>Sign Up </h2>
       <form action="" onSubmit={handleSubmit} className='flex flex-col gap-4 max-w-3xl p-4'>
         <div className="relative">
           <input
-            className="bg-white rounded-lg p-3 outline-none peer w-full"
+            className="bg-white rounded-lg p-2 outline-none peer w-full"
             type="text"
             id="name"
             onChange={addToForm}
@@ -50,7 +50,10 @@ const SignUp = () => {
           />
           <label
             htmlFor="name"
-            className="absolute left-3 top-3 text-gray-500 pointer-events-none transition-all duration-200 transform origin-top-left scale-100 -translate-y-0 peer-placeholder-shown:scale-100 peer-placeholder-shown:translate-y-0 peer-focus:scale-75 peer-focus:-translate-y-5"
+            className="absolute left-3 top-3 text-gray-500 pointer-events-none 
+            transition-all duration-200 transform origin-top-left scale-100
+             -translate-y-0 peer-placeholder-shown:scale-100 peer-placeholder-shown:translate-y-0 
+             peer-focus:scale-75 peer-focus:-translate-y-5"
           >
             Name
           </label>
@@ -64,14 +67,14 @@ const SignUp = () => {
            peer-focus:-translate-y-5 peer-focus:scale-75">Name</label>
           </div> */}
         <div className='relative'>
-          <input className='bg-white rounded-lg p-3 outline-none peer w-full' type="text"
+          <input className='bg-white rounded-lg p-2 outline-none peer w-full' type="text"
             id='email' onChange={addToForm} name='email' placeholder='' />
           <label htmlFor="email" className='absolute left-3 top-3 text-gray-500 pointer-events-none
             transition-all duration-200 transform peer-placeholder-shown:translate-y-0 peer-placeholder-shown:scale-100
             peer-focus:-translate-y-5 peer-focus:scale-75'>Email</label>
         </div>
-        <input className='bg-white rounded-lg p-3 outline-none' type="text" id='phone' onChange={addToForm} name='number' placeholder='Phone Number' />
-        <input className='bg-white rounded-lg p-3 outline-none' type="password" id='password' onChange={addToForm} name='password' placeholder='Password' />
+        <input className='bg-white rounded-lg p-2 outline-none' type="text" id='phone' onChange={addToForm} name='number' placeholder='Phone Number' />
+        <input className='bg-white rounded-lg p-2 outline-none' type="password" id='password' onChange={addToForm} name='password' placeholder='Password' />
         {/* <button className='bg-red-600 rounded-lg p-3 hover:bg-red-500 font-semibold  hover:text-white' type='submit'>Sign Up</button> */}
         <button type='submit' className='transition ease-in-out delay-150 p-3 font-semibold rounded-lg bg-red-600 hover:-translate-y-1 hover:scale-110
          hover:bg-red-500 hover:text-white duration-300'>Sign Up</button>
