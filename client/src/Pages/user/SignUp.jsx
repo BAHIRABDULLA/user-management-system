@@ -1,5 +1,6 @@
 import React, { useState } from 'react'
 import { Link ,useNavigate} from 'react-router-dom'
+import Oauth from '../../Components/Oauth'
 
 const SignUp = () => {
   const [formData, setFormdata] = useState({})
@@ -79,6 +80,7 @@ const SignUp = () => {
         <p>Already an account?
           <Link to='/signin'><span className='text-blue-500 font-medium'> Sign In</span></Link></p>
       </div>
+        <Oauth/>
       <p className='text-red-700'>{error}</p>
     </div>
   )

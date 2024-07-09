@@ -1,8 +1,9 @@
 import React, { useState } from 'react'
 import { Link, useNavigate } from 'react-router-dom'
 import axios from 'axios'
-import { signInStart,signInSuccess,signInFailure } from '../redux/user/userSlice'
+import { signInStart,signInSuccess,signInFailure } from '../../redux/user/userSlice'
 import { useDispatch, useSelector } from 'react-redux'
+import Oauth from '../../Components/Oauth'
 
 const SignIn = () => {
   const [formData, setFormdata] = useState({})
@@ -51,6 +52,7 @@ const SignIn = () => {
             <span className='text-blue-500 font-medium'> Sign Up</span></Link>
         </p>
       </div>
+      <Oauth/>
       <p className='text-red-700 mt-3'>{error}</p>
     </div>
   )
