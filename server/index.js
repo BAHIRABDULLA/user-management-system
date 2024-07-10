@@ -7,6 +7,7 @@ dotenv.config()
 
 const userRoute = require('./routes/userRoute.js')
 const authRoute = require('./routes/authRoute.js')
+const adminRoute = require('./routes/adminRoute.js')
 
 const app = express()
 // app.use(cors({
@@ -25,4 +26,5 @@ app.use(cookieParser())
 
 app.use('/server',userRoute)
 app.use('/server',authRoute)
+app.use('/server/admin/',adminRoute)
 app.listen(3004,()=>console.log(`Server listening port http://localhost:3004`))

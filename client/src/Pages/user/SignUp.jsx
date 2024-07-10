@@ -1,10 +1,10 @@
 import React, { useState } from 'react'
-import { Link ,useNavigate} from 'react-router-dom'
+import { Link, useNavigate } from 'react-router-dom'
 import Oauth from '../../Components/Oauth'
 
 const SignUp = () => {
   const [formData, setFormdata] = useState({})
-  const [error,setError] = useState('')
+  const [error, setError] = useState('')
   const navigate = useNavigate()
   const addToForm = (e) => {
 
@@ -21,9 +21,9 @@ const SignUp = () => {
         },
         body: JSON.stringify(formData)
       })
-      if(!res.ok){
+      if (!res.ok) {
         const errorData = await res.json()
-        throw new  Error(errorData )
+        throw new Error(errorData)
       }
       const data = await res.json()
       console.log(data, 'data....');
@@ -83,7 +83,7 @@ const SignUp = () => {
         <p>Already an account?
           <Link to='/signin'><span className='text-blue-500 font-medium'> Sign In</span></Link></p>
       </div>
-        <Oauth/>
+      <Oauth />
       <p className='text-red-700'>{error}</p>
     </div>
   )
