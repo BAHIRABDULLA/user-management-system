@@ -40,15 +40,16 @@ const addUser = async (req, res) => {
             phone,
             password: hashedPassord
         })
-         await userDetails.save()
+        await userDetails.save()
         console.log(userDetails, 'userDetails ......');
-        const {password:hashedPassord2,...rest}=userDetails
-        res.status(200).json({rest})
+        const { password: hashedPassord2, ...rest } = userDetails
+        res.status(200).json({ rest })
     } catch (error) {
         console.error('Error founded in signup ', error);
     }
 }
 const editUser = async (req, res) => {
+    console.log('edit user ...{{}}}}}}}}}}}}}');
     if (req.user.id !== req.params.id) {
         return res.status(401).json('You can update only your account')
     }
@@ -74,15 +75,24 @@ const editUser = async (req, res) => {
     }
 }
 
-const getUsers = async(req,res)=>{
+const getUsers = async (req, res) => {
     try {
-        const userData = await User.find()
-        console.log(userData,'userData .  in adminController ')
-        res.status(200).json(userData)
+        const { q } = req.query;
+        console.log(q, 'q in adminController');
+        let userData;
+        if (q) {
+            const regex = new RegExp(q, 'i');
+            userData = await User.find({ $or: [{ name: regex }, { email: regex }] });
+        } else {
+            userData = await User.find();
+        }
+        console.log(userData, 'userData in adminController');
+        res.status(200).json(userData);
     } catch (error) {
-        
+        console.error('Error fetching users:', error);
+        res.status(500).json({ message: 'Server Error' });
     }
-}
+};
 
 module.exports = {
     signIn,
