@@ -1,8 +1,23 @@
-import React from 'react'
+import React,{useEffect, useState} from 'react'
+import axios from 'axios'
 import { useNavigate,Link } from 'react-router-dom'
 
 const Home = () => {
+  const [users,setUsers]= useState([])
   const navigate = useNavigate()
+  useEffect(() => {
+    const fetchUsers = async()=>{
+      try {
+        const res = await axios.get('/server/admin/users')
+        console.log(res,'res in home in client side ');
+        setUsers(res.data)
+      } catch (error) {
+        console.error('Error fetching users',error);
+      }
+    }
+    fetchUsers()
+  }, [])
+  console.log(users,'users in fetch users ');
   return (
     <div className='w-max mx-auto py-6'>
       <h1 className='font-bold text-3xl uppercase text-grey-800 py-6 '>Users List</h1>
@@ -22,12 +37,13 @@ const Home = () => {
             </tr>
           </thead>
           <tbody>
-            <tr className='bg-gray-200 '>
-              <td className='py-4 px-6'>1</td>
-              <td className='py-4 px-6'>John Doe</td>
-              <td className='py-4 px-6'>WqL9C@example.com</td>
-              <td className='py-4 px-6'>5345345</td>
-              <td className='py-4 px-6'>WqLgfdgf</td>
+          {users.map((value,index)=>(
+            <tr key={index} className='bg-gray-200 '>
+              <td className='py-4 px-6'>{index}</td>
+              <td className='py-4 px-6'>{value.name}</td>
+              <td className='py-4 px-6'>{value.email}</td>
+              <td className='py-4 px-6'>{value.phone}</td>
+              <td className='py-4 px-6'><img className='h-9 w-9' src={value.profilePicture} alt="" /></td>
               <td className='py-4 px-6 flex flex-col gap-1'>
                 <Link to={'/admin/edituser'}>
                 <button className='bg-yellow-400   rounded-lg px-3'>Edit</button>
@@ -35,6 +51,7 @@ const Home = () => {
                 <button className='bg-red-600 text-white rounded-lg px-3'>Delete</button>
               </td>
             </tr>
+            ))}
           </tbody>
         </table>
       </div>

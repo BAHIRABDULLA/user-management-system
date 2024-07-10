@@ -43,6 +43,7 @@ const AddUser = () => {
     e.preventDefault()
     const res = await axios.post('/server/admin/adduser', formData)
     console.log(formData, 'form data in addUser admin side ')
+    console.log(res,'res . in add user in jsx fiel client side');
     if (res.data) {
       console.log(res.data, 'res.data ..........');
       navigate('/admin/home')

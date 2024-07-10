@@ -40,8 +40,10 @@ const addUser = async (req, res) => {
             phone,
             password: hashedPassord
         })
-        const user = userDetails.save()
+         await userDetails.save()
         console.log(userDetails, 'userDetails ......');
+        const {password:hashedPassord2,...rest}=userDetails
+        res.status(200).json({rest})
     } catch (error) {
         console.error('Error founded in signup ', error);
     }
@@ -71,8 +73,20 @@ const editUser = async (req, res) => {
         console.error('Error founded in edit User in server side', error);
     }
 }
+
+const getUsers = async(req,res)=>{
+    try {
+        const userData = await User.find()
+        console.log(userData,'userData .  in adminController ')
+        res.status(200).json(userData)
+    } catch (error) {
+        
+    }
+}
+
 module.exports = {
     signIn,
     addUser,
-    editUser
+    editUser,
+    getUsers
 }
