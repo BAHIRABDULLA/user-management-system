@@ -48,6 +48,22 @@ const addUser = async (req, res) => {
         console.error('Error founded in signup ', error);
     }
 }
+
+const getUserById = async(req,res)=>{
+    try {
+        console.log('its reached here');
+        const userId = req.params.id;
+    const user = await User.findById(userId);
+    console.log(user,'user get user by id ');
+    if (!user) {
+      return res.status(404).json({ error: 'User not found' });
+    }
+    res.status(200).json(user);
+    } catch (error) {
+        console.error('Error founded in getUser id ',error);
+    }
+}
+
 const editUser = async (req, res) => {
     console.log('edit user ...{{}}}}}}}}}}}}}');
     if (req.user.id !== req.params.id) {
@@ -97,6 +113,7 @@ const getUsers = async (req, res) => {
 module.exports = {
     signIn,
     addUser,
+    getUserById,
     editUser,
     getUsers
 }

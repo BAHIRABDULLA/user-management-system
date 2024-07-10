@@ -45,6 +45,18 @@ const deleteUser = async (req, res) => {
         console.error('Error founded in deleteUser ', error);
     }
 }
+//   this is special funciton , may be delete in future
+const deleteUserByAdmin=async(req,res)=>{
+   
+    try {
+        await User.findByIdAndDelete(req.params.id)
+        res.status(200).json('User has been deleted...')
+    } catch (error) {
+        console.error('Error founded in deleteUser ', error);
+    }
+}
+
+
 const signOut = async(req,res)=>{
     try {
         res.clearCookie('access_token').status(200).json('signout success')
@@ -57,5 +69,6 @@ module.exports = {
     loadPage,
     updateProfile,
     deleteUser,
+    deleteUserByAdmin,
     signOut
 }

@@ -2,9 +2,10 @@ import React,{ useRef,useState,useEffect } from 'react'
 import axios  from 'axios'
 import { app } from '../../firebase'
 import { getDownloadURL, getStorage, ref, uploadBytesResumable } from 'firebase/storage'
-import { Link, useNavigate } from 'react-router-dom'
+import { Link, useNavigate ,useParams} from 'react-router-dom'
 
 const EditUser = () => {
+    // const [user, setUser] = useState(null);
     const fileRef = useRef(null)
     const [image, setImage] = useState(undefined)
     const navigate = useNavigate()
@@ -12,6 +13,19 @@ const EditUser = () => {
     const addToForm =(e)=>{
         setFormData({...formData,[e.target.id]:e.target.value})
     }
+    const {id} = useParams()
+
+    useEffect(() => {
+      const fetchUser = async () => {
+        try {
+          const res = await axios.get(`/server/admin/editUser/${id}`);
+          setFormData(res.data);
+        } catch (error) {
+          console.error('Error fetching user data', error);
+        }
+      };
+      fetchUser();
+    }, [id])
 
     useEffect(() => {
         if (image) {
@@ -57,9 +71,9 @@ const EditUser = () => {
         <img onClick={() => fileRef.current.click()} src={formData.profilePicture}
           alt="" className='h-16 outline-green-800 border-red-800-400 w-24 self-center
         cursor-pointer rounded-full object-cover'/>
-      <input className='bg-white rounded-lg p-2 outline-none' type="text" id='name' onChange={addToForm} name='name' placeholder="Name"  />
-      <input className='bg-white rounded-lg p-2 outline-none' type="text" id='email' onChange={addToForm} name='email' placeholder="Email" />
-      <input className='bg-white rounded-lg p-2 outline-none' type="text" id='phone' onChange={addToForm} name='number' placeholder='Phone Number' />
+      <input className='bg-white rounded-lg p-2 outline-none' value={formData.name} type="text" id='name' onChange={addToForm} name='name' placeholder="Name"  />
+      <input className='bg-white rounded-lg p-2 outline-none' value={formData.email} type="text" id='email' onChange={addToForm} name='email' placeholder="Email" />
+      <input className='bg-white rounded-lg p-2 outline-none' value={formData.phone} type="text" id='phone' onChange={addToForm} name='number' placeholder='Phone Number' />
       <input className='bg-white rounded-lg p-2 outline-none' type="password" id='password' onChange={addToForm} name='password' placeholder='Password' />
       <button className='bg-red-600 rounded-lg p-3 hover:bg-red-500 font-semibold uppercase hover:text-white' type='submit'>Edit user</button>
     </form>
